@@ -25,7 +25,8 @@ class AttendanceController extends Controller
         $attendances =  QueryBuilder::for(Attendance::class)
             ->where('cloud_id', $client_id)
             ->allowedFilters(['pin', 'employee_name'])
-            ->paginate();
+            ->paginate()
+            ->appends(request()->query());
     
         return AttendanceResource::collection($attendances)->additional([
             'status' => true,

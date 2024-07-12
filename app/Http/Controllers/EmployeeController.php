@@ -24,7 +24,8 @@ class EmployeeController extends Controller
         $employees =QueryBuilder::for(Employee::class)
         ->where('client_id', $client_id)
         ->allowedFilters(['client_id', 'name'])
-        ->paginate();
+        ->paginate()
+        ->appends(request()->query());
 
         return response()->json(array_merge([
            'status' => true,

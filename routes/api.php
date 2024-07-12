@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FingerspotController;
@@ -11,7 +12,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::resource('clients', ClientController::class);
-Route::resource('employee', EmployeeController::class);
-Route::post('webhook', [FingerspotController::class, 'webhook']);
-Route::resource('attendance', AttendanceController::class);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('registration', [AuthController::class, 'registration']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('clients', ClientController::class);
+    Route::resource('employee', EmployeeController::class);
+    Route::post('webhook', [FingerspotController::class, 'webhook']);
+    Route::resource('attendance', AttendanceController::class);
+});

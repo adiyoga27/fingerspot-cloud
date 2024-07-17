@@ -10,6 +10,7 @@ class Devices extends Model
     use HasFactory;
     protected $fillable = [
         'cloud_id',
-        'name'
+        'name',
+        'thumbnail'
     ];
 }

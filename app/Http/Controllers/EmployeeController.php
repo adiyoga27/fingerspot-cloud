@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EmployeeResource;
 use App\Models\Devices;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -27,11 +28,10 @@ class EmployeeController extends Controller
         ->paginate()
         ->appends(request()->query());
 
-        return response()->json(array_merge([
-           'status' => true,
-           'message' => "success",
-
-        ], $employees->toArray()));
+        return EmployeeResource::collection($employees)->additional([
+            'status' => true,
+            'message' => 'success'
+        ]);
     }
 
     /**
@@ -55,11 +55,16 @@ class EmployeeController extends Controller
             ]);
         }
         try {
-            Employee::create([
+            $payload = [
                 'client_id' => $client_id,
                 'name' => $request->name,
                 'pin' => $request->pin,
-            ]);
+            ];
+
+            if(isset($request->thumbnail)) {
+                $payload['avatar'] = $request->file('avatar')->store('employees', 'public');
+            }
+            Employee::create($payload);
             return response()->json([
                'status' => true,
                'message' => "Employee created successfully " ,
@@ -97,10 +102,14 @@ class EmployeeController extends Controller
         //
 
         try {
-            Employee::where('id', $id)->update([
-                'name' => $request->name,
-                'pin' => $request->pin,
-            ]);
+           $payload = [
+            'name' => $request->name,
+            'pin' => $request->pin,
+           ];
+            if(isset($request->avatar)) {
+                $payload['avatar'] = $request->file('avatar')->store('employees', 'public');
+            }
+            Employee::where('id', $id)->update($payload);
             return response()->json([
                'status' => true,
                'message' => "Employee updated successfully",

@@ -38,6 +38,7 @@ class AuthController extends Controller
                 ['*'],                         // Whatever abilities you want
                 Carbon::now()->addDays(360)     // The expiration date
             );
+            
             $user['token'] = $token;
             return response()->json([
                 'status' => true,

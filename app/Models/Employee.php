@@ -12,7 +12,8 @@ class Employee extends Model
     protected $fillable = [
         'client_id',
         'name',
-        'pin'
+        'pin',
+        'avatar'
     ];
 
     public function device() {

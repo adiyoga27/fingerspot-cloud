@@ -6,6 +6,7 @@ use App\Http\Resources\AttendanceResource;
 use App\Models\Attendance;
 use App\Models\Devices;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class AttendanceController extends Controller
@@ -24,7 +25,7 @@ class AttendanceController extends Controller
         }
         $attendances =  QueryBuilder::for(Attendance::class)
             ->where('cloud_id', $client_id)
-            ->allowedFilters(['pin', 'employee_name'])
+            ->allowedFilters(['pin', 'employee_name', AllowedFilter::scope('starts_between')])
             ->paginate()
             ->appends(request()->query());
     

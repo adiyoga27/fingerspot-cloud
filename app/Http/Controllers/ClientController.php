@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DeviceResource;
 use App\Models\Devices;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -16,12 +17,11 @@ class ClientController extends Controller
         $devices =  QueryBuilder::for(Devices::class)
         ->allowedFilters(['cloud_id', 'name'])
         ->paginate();
-    
-        return response()->json(array_merge([
+        return DeviceResource::collection($devices)->additional([
             'status' => true,
-            'message' => "success",
-            
-        ], $devices->toArray()));
+            'message' => 'success'
+        ]);
+        
         
     }
 
@@ -39,10 +39,15 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         try {
-            Devices::create([
+            $payload = [
                 'cloud_id' => $request->cloud_id,
                 'name' => $request->name
-            ]);
+            ];
+
+            if(isset($request->thumbnail)) {
+                $payload['thumbnail'] = $request->file('thumbnail')->store('devices', 'public');
+            }
+            Devices::create($payload);
             return response()->json([
                'status' => true,
                'message' => 'Device created successfully'
@@ -78,10 +83,15 @@ class ClientController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            Devices::find($id)->update([
+            $payload = [
                 'cloud_id' => $request->cloud_id,
                 'name' => $request->name
-            ]);
+            ];
+            if(isset($request->thumbnail)) {
+                $payload['thumbnail'] = $request->file('thumbnail')->store('devices', 'public');
+            }
+
+            Devices::find($id)->update($payload);
             return response()->json([
                'status' => true,
                'message' => 'Device updated successfully'

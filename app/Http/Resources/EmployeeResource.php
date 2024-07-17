@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthResource extends JsonResource
+class EmployeeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,13 +16,12 @@ class AuthResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'client_id' => $this->client_id,
             'name' => $this->name,
-            'username' => $this->username,
-            'email' => $this->email,
-            'role' => $this->role,
-            'token_type' => 'Bearer',
-            'access_token' => $this->token->plainTextToken,
-            'expires_at' => Carbon::parse($this->token->accessToken?->expires_at)->toDateTimeString(),
+            'pin' => $this->pin,
+            'avatar' => $this->avatar ? asset('storage/'.$this->avatar) : null,
+            'created_at' => $this->created_at->format('d/M/Y H:i'),
+            'updated_at' => $this->updated_at->format('d/M/Y H:i'),
         ];
     }
 }

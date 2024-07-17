@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,5 +27,9 @@ class Attendance extends Model
 
     public function employee() {
         return $this->belongsTo(Employee::class, 'employee_id', 'id');
+    }
+    public function scopeStartsBetween(Builder $query, $dateStart, $dateEnd): Builder
+    {
+        return $query->whereBetween('scan_at', [$dateStart, $dateEnd]);
     }
 }

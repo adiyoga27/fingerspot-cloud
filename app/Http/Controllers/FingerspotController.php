@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Webhooks;
+use App\Services\FirebaseService;
 use Illuminate\Http\Request;
 
 class FingerspotController extends Controller
 {
+    public function test(Request $request) {
+        $response = (new FirebaseService)->sendNotification('Test Title', 'Test Body', 'all', 'android');
+        return response()->json(['message' => 'Notification sent successfully', 'response' => $response]);
+    }
     public function webhook(Request $request) {
         try {
             Webhooks::create([

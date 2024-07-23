@@ -15,4 +15,4 @@ Route::get('login', function(){
 });
 
 Route::post('login', [AuthController::class, 'verify']);
-Route::get('test', [DashboardController::class, 'index']);
+Route::get('test', [FingerspotController::class, 'test']);

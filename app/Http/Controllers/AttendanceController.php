@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AttendanceResource;
+use App\Http\Resources\ScanAttendanceResource;
 use App\Models\Attendance;
 use App\Models\Devices;
 use DateInterval;
@@ -11,7 +12,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-
+setlocale(LC_ALL, 'id_ID.utf8');
 class AttendanceController extends Controller
 {
     /**
@@ -86,7 +87,7 @@ class AttendanceController extends Controller
         //
     }
     public function getAttendanceByDate(Request $request) {
-            
+ 
             $client_id = $request->header('cloud-id');
             if(!Devices::where('cloud_id', $client_id)->exists()){
                 return response()->json([
@@ -117,7 +118,7 @@ class AttendanceController extends Controller
                         }
                 if(count($attendance)>0) {
                     $datas[] = [
-                        'date' => $dt->format("d F Y"),
+                        'date' => $this->hariIndo($dt->format("l")).",".$dt->format("d F Y"),
                         'employee' => $employees
                     ];
                 }
@@ -129,4 +130,33 @@ class AttendanceController extends Controller
                 'data' => $datas
             ]);
         }
+        
+   function getAttendance($client_id, $employee_id, $scan_at) {
+    $results = Attendance::where('cloud_id', $client_id)
+                ->whereDate('scan_at', $scan_at)
+                ->where('employee_id', $employee_id)
+                ->orderBy('scan_at', 'asc')
+                ->get();
+    return ScanAttendanceResource::collection($results);
+}
+function hariIndo ($hariInggris) {
+    switch ($hariInggris) {
+      case 'Sunday':
+        return 'Minggu';
+      case 'Monday':
+        return 'Senin';
+      case 'Tuesday':
+        return 'Selasa';
+      case 'Wednesday':
+        return 'Rabu';
+      case 'Thursday':
+        return 'Kamis';
+      case 'Friday':
+        return 'Jumat';
+      case 'Saturday':
+        return 'Sabtu';
+      default:
+        return 'hari tidak valid';
+    }
+  }
 }

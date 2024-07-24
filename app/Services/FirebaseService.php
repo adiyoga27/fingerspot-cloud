@@ -40,7 +40,6 @@ class FirebaseService
             }
     
             return response()->json($response->json());
-        return $result;
 
         } catch (\Throwable $th) {
             throw $th;

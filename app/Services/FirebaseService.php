@@ -9,6 +9,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Google\Cloud\Firestore\FirestoreClient;
+use Illuminate\Support\Facades\Http;
 
 class FirebaseService
 {
@@ -22,22 +23,23 @@ class FirebaseService
     public function sendNotification($title, $body, $to, $platform = 'android')
     {
         try {
-            $notification = Notification::create($title, $body);
-            $message = CloudMessage::withTarget('topic', $to)->withNotification($notification);
-            $result = Firebase::project('gsfinger');
-            $result->messaging()->send($message);
-            $formData = array(
+            $response = Http::asMultipart()->post('http://fcm.galkasoft.id/api/send', [
+                'to[0]' => $to,
                 'title' => $title,
-                'message' => $body,
-                'to' => $to,
-                'type' => 'notif',
-                'clickable' => false,
-                'timestamp' => Carbon::now(),
-                'read_by' => [],
-                // 'data' => $data
-            );
-            // Save Kalau Notif 
-            $result->firestore()->database()->collection('notifications')->newDocument()->set($formData);
+                'message' =>  $body,
+                'type' => 'link',
+                'clickable' => '0',
+                'is_notif' => '1',
+                'group' => 'gsfinger',
+                'send_by' => 'adiyoga27',
+                'is_all' => 'false',
+            ]);
+    
+            if ($response->failed()) {
+                return response()->json(['error' => $response->body()], 500);
+            }
+    
+            return response()->json($response->json());
         return $result;
 
         } catch (\Throwable $th) {

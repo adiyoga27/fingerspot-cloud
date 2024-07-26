@@ -16,12 +16,13 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $client_id = $request->header('cloud-id');
-        if(!Devices::where('cloud_id', $client_id)->exists()){
-            return response()->json([
-                'status' => false,
-               'message' => "Device not found with provided cloud id ",
-            ]);
-        }
+        // if(!Devices::where('cloud_id', $client_id)->exists()){
+        //     return response()->json([
+        //         'status' => false,
+        //       'message' => "Device not found with provided cloud id ",
+        //     ]);
+        // }
+        $client_id = "C2630450C31E1824";
         $employees =QueryBuilder::for(Employee::class)
         ->where('client_id', $client_id)
         ->allowedFilters(['client_id', 'name'])

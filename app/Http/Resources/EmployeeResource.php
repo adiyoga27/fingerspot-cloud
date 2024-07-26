@@ -18,7 +18,7 @@ class EmployeeResource extends JsonResource
             'id' => $this->id,
             'client_id' => $this->client_id,
             'name' => $this->name,
-            'pin' => $this->pin,
+            'pin' => (int) $this->pin,
             'avatar' => $this->avatar ? asset('storage/'.$this->avatar) : null,
             'created_at' => $this->created_at->format('d/M/Y H:i'),
             'updated_at' => $this->updated_at->format('d/M/Y H:i'),

@@ -20,7 +20,7 @@ class AttendanceResource extends JsonResource
             'scan_at' => Carbon::parse($this->scan_at)->format('d/M/Y H:i'),
             'employee_name' => $this->employee_name,
             'device_name' => $this->device_name,
-            'pin' => $this->pin,
+            'pin' => (int) $this->pin,
             'scan_status' => $this->checkScanStatus($this->scan_status),
         ];
     }

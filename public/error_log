@@ -1,0 +1,18 @@
+[25-Jul-2024 06:36:32 Asia/Jakarta] PHP Warning:  require(/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:32 Asia/Jakarta] PHP Warning:  require(/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:32 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/cod37784/project/fingerspot.codingaja.com/public/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:56 Asia/Jakarta] PHP Warning:  require(/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:56 Asia/Jakarta] PHP Warning:  require(/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:56 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/cod37784/project/fingerspot.codingaja.com/public/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:57 Asia/Jakarta] PHP Warning:  require(/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:57 Asia/Jakarta] PHP Warning:  require(/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[25-Jul-2024 06:36:57 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/cod37784/project/fingerspot.codingaja.com/public/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/cod37784/project/fingerspot.codingaja.com/public/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13

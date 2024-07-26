@@ -88,7 +88,9 @@ class AttendanceController extends Controller
     }
     public function getAttendanceByDate(Request $request) {
  
-            $client_id = $request->header('cloud-id');
+            // $client_id = $request->header('cloud-id');
+             $client_id = "C2630450C31E1824";
+            
             if(!Devices::where('cloud_id', $client_id)->exists()){
                 return response()->json([
                     'status' => false,
@@ -98,6 +100,7 @@ class AttendanceController extends Controller
     
             $begin = new DateTime($request->start_at);
             $end = new DateTime($request->end_at);
+            $end->modify('+1 day');
             
             $interval = DateInterval::createFromDateString('1 day');
             $period = new DatePeriod($begin, $interval, $end);
@@ -110,7 +113,7 @@ class AttendanceController extends Controller
                         ->select('employee_id', 'employee_name')->get();
                         foreach($attendance as $employee) {
                             $employees[] = [
-                                'employee_id' => $employee->employee_id,
+                                'employee_id' => (int) $employee->employee_id,
                                 'employee_name' => $employee->employee_name,
                                 'avatar' => isset($employee->employee->avatar) ? url('storage').$employee->employee->avatar : null,
                                 'attendance' => $this->getAttendance($client_id, $employee->employee_id,$scanAt)

@@ -39,7 +39,7 @@ class FingerspotController extends Controller
                            'scan_verify' => $request->data['verify'],
                            'scan_status' => $request->data['status_scan'],
                         ]) ;   
-                        (new FirebaseService)->sendNotification('Scan Absensi', $employee->name." melakukan scan pada waktu ".$request->data['scan'], 'all', 'android');
+                        (new FirebaseService)->sendNotification($employee->name. ' Scan Absensi', $employee->name." melakukan scan pada waktu ".$request->data['scan'], 'all', 'android');
 
                     }
             }

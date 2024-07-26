@@ -28,7 +28,8 @@ class FingerSyncJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $trans = Tran::count();
+        try {
+            $trans = Tran::count();
         $payload = [
             "trans_id" => $trans + 1,
             "cloud_id" => "C2630450C31E1824",
@@ -41,7 +42,11 @@ class FingerSyncJob implements ShouldQueue
             Tran::create([
                         'title' => 'Get Att Logs',
                         'hits' => $result,
-                        'results' => $result->json('results'),
+                        'results' => $result->json(),
                     ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        
     }
 }

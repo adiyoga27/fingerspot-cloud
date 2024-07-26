@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\Tran;
 use App\Models\Webhooks;
 use App\Services\FirebaseService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class FingerspotController extends Controller
 {
@@ -56,5 +59,24 @@ class FingerspotController extends Controller
        
     }
 
-    
+    function test2() {
+        try {
+            $trans = Tran::get()->count();
+        $payload = [
+            "trans_id" => $trans + 1,
+            "cloud_id" => "C2630450C31E1824",
+            "start_date" => Carbon::now()->format('Y-m-d'),
+            "end_date" => Carbon::now()->format('Y-m-d'),
+        ];
+        $result = Http::withHeaders(['Authorization' => 'Bearer C613PAKIHDWXJK5D'])
+                    ->post("https://developer.fingerspot.io/api/get_attlog", $payload);
+            Tran::create([
+                        'title' => 'Get Att Logs',
+                        'hits' => $payload,
+                        'results' => $result->json()['data'] ?? [],
+                    ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

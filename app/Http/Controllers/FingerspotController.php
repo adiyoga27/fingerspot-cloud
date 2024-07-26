@@ -10,6 +10,7 @@ use App\Services\FirebaseService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class FingerspotController extends Controller
 {
@@ -18,6 +19,7 @@ class FingerspotController extends Controller
         return response()->json(['message' => 'Notification sent successfully', 'response' => $response]);
     }
     public function webhook(Request $request) {
+        $this->logInfo(json_encode($request), "Fingerspot");
         try {
             Webhooks::create([
                 'type_hit' => $request->type,
@@ -79,4 +81,68 @@ class FingerspotController extends Controller
             throw $th;
         }
     }
+
+public static function errorInfo($content, Throwable $e, $title = 'Fingerspot')
+  {
+    $content = json_encode($content);
+    Http::post(env("DISCORD_WEBHOOK", "https://discord.com/api/webhooks/1175802860198436914/eZKoG9VTyi4J1rjmDXCOh6C7y3oi0jqKaCK4jMkR-VwqPlxL82c0HscbtFxBdxhuNbr7"), [
+
+      "username" => "Dicsystime",
+      // "avatar_url"=> "https://i.imgur.com/4M34hi2.png",
+      "embeds" => [
+        [
+          "title" => $title,
+          "description" => "```$content```",
+          "color" => 15258703,
+          "fields" => [
+            array(
+              'name' => 'Path',
+              'value' =>  request()->path(),
+              "inline" => true
+            ),
+            array(
+              'name' => 'File',
+              'value' =>  $e->getFile(),
+              "inline" => true
+            ),
+            array(
+              'name' => 'Line',
+              'value' =>  $e->getLine(),
+              "inline" => true
+
+            ),
+          ]
+        ],
+      ],
+
+    ]);
+  }
+
+
+public static function logInfo($content,$title = 'Fingerspot')
+{
+  $content = json_encode($content);
+  Http::post(env("DISCORD_WEBHOOK", "https://discord.com/api/webhooks/1175802860198436914/eZKoG9VTyi4J1rjmDXCOh6C7y3oi0jqKaCK4jMkR-VwqPlxL82c0HscbtFxBdxhuNbr7"), [
+
+    "username" => "Dicsystime",
+    // "avatar_url"=> "https://i.imgur.com/4M34hi2.png",
+    "embeds" => [
+      [
+        "title" => $title,
+        "description" => "```$content```",
+        "color" => 15258703,
+        "fields" => [
+          array(
+            'name' => 'Path',
+            'value' =>  request()->path(),
+            "inline" => true
+          ),
+       
+      
+        ]
+      ],
+    ],
+
+  ]);
+}
 }

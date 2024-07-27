@@ -58,6 +58,8 @@ class FingerspotController extends Controller
             ]);
         } catch (\Throwable $th) {
           $this->errorInfo($th->getMessage(),$th);
+          $this->logInfo(json_encode($request->all()));
+
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()

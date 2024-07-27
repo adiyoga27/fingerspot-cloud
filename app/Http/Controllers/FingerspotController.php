@@ -20,8 +20,10 @@ class FingerspotController extends Controller
         return response()->json(['message' => 'Notification sent successfully', 'response' => $response]);
     }
     public function webhook(Request $request) {
+      
         try {
-            $validation = $request->all();
+          $this->saveText($request);
+          $validation = $request->all();
             $payload = [
                 'type_hit' => $validation['type'],
                 'cloud_id' => $validation['cloud_id'],
@@ -152,4 +154,19 @@ public static function logInfo($content,$title = 'Fingerspot')
 
   ]);
 }
+
+  function saveText(Request $request) {
+    $body = $request->getContent();
+          
+    // Simpan data body ke file .txt
+    $file = 'data-finger.txt';
+    if (Storage::exists($file)) {
+        $data = Storage::get($file);
+    } else {
+        $data = '';
+    }
+
+    $data .= $body . "\n";
+    Storage::put($file, $data);
+  }
 }

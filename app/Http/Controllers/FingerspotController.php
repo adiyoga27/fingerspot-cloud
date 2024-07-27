@@ -10,6 +10,7 @@ use App\Services\FirebaseService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class FingerspotController extends Controller
@@ -19,7 +20,31 @@ class FingerspotController extends Controller
         return response()->json(['message' => 'Notification sent successfully', 'response' => $response]);
     }
     public function webhook(Request $request) {
-        $this->logInfo(json_encode($request), "Fingerspot");
+
+      $validatedData = $request->validate([
+        'type' => 'required|string',
+        'cloud_id' => 'required|string',
+      ]);
+
+      $filePath = 'logs/data.json';
+
+      // Load existing data
+      if (Storage::disk('local')->exists($filePath)) {
+          $existingData = json_decode(Storage::disk('local')->get($filePath), true);
+      } else {
+          $existingData = [];
+      }
+
+      // Add new data
+      $existingData[] = $validatedData;
+
+      // Encode data as JSON
+      $encodedData = json_encode($existingData, JSON_PRETTY_PRINT);
+
+      // Store the updated data back to the file
+      Storage::disk('local')->put($filePath, $encodedData);
+    
+        $this->logInfo(json_encode($request->all()), "Fingerspot");
         try {
             Webhooks::create([
                 'type_hit' => $request->type,

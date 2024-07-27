@@ -20,10 +20,7 @@ class FingerspotController extends Controller
         return response()->json(['message' => 'Notification sent successfully', 'response' => $response]);
     }
     public function webhook(Request $request) {
-
-       
         try {
-
             $validation = $request->all();
             $payload = [
                 'type_hit' => $validation['type'],

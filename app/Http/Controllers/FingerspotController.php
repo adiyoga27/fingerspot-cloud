@@ -25,7 +25,7 @@ class FingerspotController extends Controller
             $payload = [
                 'type_hit' => $validation['type'],
                 'cloud_id' => $validation['cloud_id'],
-                'data' => json_encode($validation['data']),
+                'data' => json_encode($validation),
             ];
             if(isset($payload['trans_id'])){
               $payload['trans_id'] = $validation['trans_id'];

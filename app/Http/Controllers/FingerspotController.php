@@ -156,17 +156,24 @@ public static function logInfo($content,$title = 'Fingerspot')
 }
 
   function saveText(Request $request) {
-    $body = $request->getContent();
-          
-    // Simpan data body ke file .txt
-    $file = 'data-finger.txt';
-    if (Storage::exists($file)) {
-        $data = Storage::get($file);
-    } else {
-        $data = '';
-    }
+    try {
+      $body = $request->getContent();
+            
+      $file = 'data-finger.txt';
+      if (Storage::exists($file)) {
+          $data = Storage::get($file);
+      } else {
+          $data = '';
+      }
 
-    $data .= $body . "\n";
-    Storage::put($file, $data);
+      $data .= $body . "\n";
+      Storage::put($file, $data);
+      $this->logInfo("Data Fingerspot Terhit");
+    } catch (\Throwable $th) {
+      //throw $th;
+      $this->logInfo("Data Fingerspot Gagal Menyimpan Log ".$th->getMessage());
+
+    }
+  
   }
 }

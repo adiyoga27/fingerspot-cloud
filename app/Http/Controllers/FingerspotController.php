@@ -52,7 +52,7 @@ class FingerspotController extends Controller
                             'scan_verify' => $attlog['verify'],
                             'scan_status' => $attlog['status_scan'],
                         ]) ;   
-                        (new FirebaseService)->sendNotification(strtoupper($employee->name) . ' SCAN '.$this->statusScan($attlog['status_scan']), $employee->name." melakukan scan pada waktu ".date("d F Y H:i", strtotime($attlog['scan'])), 'all', 'android');
+                        (new FirebaseService)->sendNotification(strtoupper($employee->name) . ' SCAN '.$this->statusScan($attlog['status_scan']), $employee->name." melakukan scan pada waktu ".date("d F Y H:i", strtotime($attlog['scan']))." wita", 'all', 'android');
 
                     }
             }

@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('attendance',[AttendanceController::class, 'getAttendanceByDate']);
 });
 Route::post('webhook', [FingerspotController::class, 'webhook']);
+Route::get('webhook', [FingerspotController::class, 'webhook']);

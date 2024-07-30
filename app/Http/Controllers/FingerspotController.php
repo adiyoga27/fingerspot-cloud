@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Tran;
 use App\Models\Webhooks;
+use App\ScanType;
 use App\Services\FirebaseService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class FingerspotController extends Controller
                             'scan_verify' => $attlog['verify'],
                             'scan_status' => $attlog['status_scan'],
                         ]) ;   
-                        (new FirebaseService)->sendNotification($employee->name. ' Scan Absensi', $employee->name." melakukan scan pada waktu ".$attlog['scan'], 'all', 'android');
+                        (new FirebaseService)->sendNotification($employee->name. ' Scan '.ScanType::from($attlog['status_scan'])->name, $employee->name." melakukan scan pada waktu ".$attlog['scan'], 'all', 'android');
 
                     }
             }

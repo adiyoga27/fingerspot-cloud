@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Enums;
 
-enum ScanType
+enum ScanEnum
 {
     const MASUK = 0;
     const PULANG = 1;
@@ -12,5 +12,4 @@ enum ScanType
     const PULANG_LEMBUR = 5; //scan pulang lembur
     const RAPAT = 6; //scan keluar lembur
     const PULANG_RAPAT = 7;
-
 }

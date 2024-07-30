@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ScanEnum;
 use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Tran;
@@ -51,7 +52,7 @@ class FingerspotController extends Controller
                             'scan_verify' => $attlog['verify'],
                             'scan_status' => $attlog['status_scan'],
                         ]) ;   
-                        (new FirebaseService)->sendNotification($employee->name. ' Scan '.ScanType::from($attlog['status_scan'])->name, $employee->name." melakukan scan pada waktu ".$attlog['scan'], 'all', 'android');
+                        (new FirebaseService)->sendNotification(strtoupper($employee->name) . ' SCAN '.$this->statusScan($attlog['status_scan']), $employee->name." melakukan scan pada waktu ".date("d F Y H:i", strtotime($attlog['scan'])), 'all', 'android');
 
                     }
             }
@@ -69,6 +70,25 @@ class FingerspotController extends Controller
             ]);
         }
        
+    }
+    public function statusScan($status){
+       switch ($status) {
+        case '0':
+          return "MASUK";
+          break;
+          case '1':
+            return "PULANG";
+            break;
+            case '2':
+              return "ISTIRAHAT";
+              break;
+              case '3':
+                return "KEMBALI ISTIRAHAT";
+                break;
+        default:
+          return "ABSENSI";
+          break;
+       }
     }
 
     function test2() {

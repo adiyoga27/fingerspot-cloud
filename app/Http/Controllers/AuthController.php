@@ -50,7 +50,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => false,
             'message' => 'Username or password invalid !!!'
-        ], 401);
+        ], 200);
     }
     public function registration(Request $request){
         $request->validate([

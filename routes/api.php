@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::post('webhook', [FingerspotController::class, 'webhook']);
 Route::get('webhook', [FingerspotController::class, 'webhook']);
+Route::post('get-att-log', [FingerspotController::class, 'getAttLog']);

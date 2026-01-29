@@ -112,6 +112,148 @@ class FingerspotController extends Controller
         }
     }
 
+    /**
+     * Manual fetch attendance logs from Fingerspot API
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAttLog(Request $request) {
+        try {
+            $validated = $request->validate([
+                'cloud_id' => 'required|string',
+                'start_date' => 'required|date_format:Y-m-d',
+                'end_date' => 'required|date_format:Y-m-d',
+            ]);
+
+            // Generate unique trans_id
+            $trans = Tran::get()->count();
+            $transId = date('Ymd') . str_pad($trans + 1, 3, '0', STR_PAD_LEFT);
+
+            $payload = [
+                "trans_id" => $transId,
+                "cloud_id" => $validated['cloud_id'],
+                "start_date" => $validated['start_date'],
+                "end_date" => $validated['end_date'],
+            ];
+
+            // Call Fingerspot API
+            $result = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . env('FINGERSPOT_API_KEY', 'C613PAKIHDWXJK5D')
+            ])->post("https://developer.fingerspot.io/api/get_attlog", $payload);
+
+            $response = $result->json();
+
+            // Log the transaction
+            Tran::create([
+                'title' => 'Get Att Logs Manual',
+                'hits' => json_encode($payload),
+                'results' => json_encode($response['data'] ?? []),
+            ]);
+
+            if (!isset($response['success']) || !$response['success']) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Failed to fetch attendance logs from Fingerspot',
+                    'response' => $response
+                ], 400);
+            }
+
+            $attlogs = $response['data'] ?? [];
+            $processedCount = 0;
+            $skippedCount = 0;
+            $processedRecords = [];
+
+            foreach ($attlogs as $attlog) {
+                // Find employee by pin and cloud_id
+                $employee = Employee::where('pin', $attlog['pin'])
+                    ->where('client_id', $validated['cloud_id'])
+                    ->first();
+
+                if ($employee) {
+                    // Check if attendance already exists (avoid duplicates)
+                    $existingAttendance = Attendance::where('pin', $attlog['pin'])
+                        ->where('cloud_id', $validated['cloud_id'])
+                        ->where('scan_at', $attlog['scan_date'])
+                        ->first();
+
+                    if (!$existingAttendance) {
+                        Attendance::create([
+                            'employee_id' => $employee->id,
+                            'cloud_id' => $validated['cloud_id'],
+                            'device_id' => $employee->device->id ?? null,
+                            'device_name' => $employee->device->name ?? null,
+                            'employee_name' => $employee->name,
+                            'pin' => $attlog['pin'],
+                            'scan_at' => $attlog['scan_date'],
+                            'scan_verify' => $attlog['verify'],
+                            'scan_status' => $attlog['status_scan'],
+                        ]);
+
+                        // Send notification
+                        (new FirebaseService)->sendNotification(
+                            strtoupper($employee->name) . ' SCAN ' . $this->statusScan($attlog['status_scan']),
+                            $employee->name . " melakukan scan pada waktu " . date("d F Y H:i", strtotime($attlog['scan_date'])) . " wita",
+                            'all',
+                            'android'
+                        );
+
+                        $processedCount++;
+                        $processedRecords[] = [
+                            'pin' => $attlog['pin'],
+                            'employee_name' => $employee->name,
+                            'scan_date' => $attlog['scan_date'],
+                            'status' => 'created'
+                        ];
+                    } else {
+                        $skippedCount++;
+                        $processedRecords[] = [
+                            'pin' => $attlog['pin'],
+                            'employee_name' => $employee->name,
+                            'scan_date' => $attlog['scan_date'],
+                            'status' => 'already_exists'
+                        ];
+                    }
+                } else {
+                    $skippedCount++;
+                    $processedRecords[] = [
+                        'pin' => $attlog['pin'],
+                        'employee_name' => null,
+                        'scan_date' => $attlog['scan_date'],
+                        'status' => 'employee_not_found'
+                    ];
+                }
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Attendance logs fetched and processed successfully',
+                'trans_id' => $transId,
+                'summary' => [
+                    'total_records' => count($attlogs),
+                    'processed' => $processedCount,
+                    'skipped' => $skippedCount,
+                ],
+                'records' => $processedRecords
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Throwable $th) {
+            $this->errorInfo($th->getMessage(), $th);
+            
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
 public static function errorInfo($content, Throwable $e, $title = 'Fingerspot')
   {
     $content = json_encode($content);

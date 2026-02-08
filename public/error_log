@@ -16,3 +16,19 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/cod37784/project/fingerspot.codingaja.com/public/index.php on line 13
+[11-Mar-2025 21:00:39 Asia/Jakarta] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.31. in /home/cod37784/project/fingerspot.codingaja.com/vendor/composer/platform_check.php on line 24
+[11-Mar-2025 21:00:41 Asia/Jakarta] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.31. in /home/cod37784/project/fingerspot.codingaja.com/vendor/composer/platform_check.php on line 24
+[25-Nov-2025 15:03:27 Asia/Jakarta] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/composer/autoload_real.php(25): require()
+#1 /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/autoload.php(22): ComposerAutoloaderInitf0ad9fe80cd6c90d6981aeb115cd6c15::getLoader()
+#2 /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/public/index.php(13): require('/home/kktk6246/...')
+#3 {main}
+  thrown in /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/composer/platform_check.php on line 22
+[25-Nov-2025 15:08:33 Asia/Jakarta] PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/composer/platform_check.php:22
+Stack trace:
+#0 /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/composer/autoload_real.php(25): require()
+#1 /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/autoload.php(22): ComposerAutoloaderInitf0ad9fe80cd6c90d6981aeb115cd6c15::getLoader()
+#2 /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/public/index.php(13): require('/home/kktk6246/...')
+#3 {main}
+  thrown in /home/kktk6246/projects/codingaja.com/fingerspot.codingaja.com/vendor/composer/platform_check.php on line 22

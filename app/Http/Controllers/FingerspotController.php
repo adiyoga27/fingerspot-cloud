@@ -294,7 +294,7 @@ public static function errorInfo($content, Throwable $e, $title = 'Fingerspot')
 public static function logInfo($content,$title = 'Fingerspot')
 {
   $content = json_encode($content);
-  Http::post(env("DISCORD_WEBHOOK", "https://discord.com/api/webhooks/1175802860198436914/eZKoG9VTyi4J1rjmDXCOh6C7y3oi0jqKaCK4jMkR-VwqPlxL82c0HscbtFxBdxhuNbr7"), [
+  Http::post(env("DISCORD_WEBHOOK", "https://discordapp.com/api/webhooks/1469859992936120403/fgi8XXyTYsstSbF5EUnXmlaQb57jPsNm9zuYrNrZ5Gtfy1qtrmR9OUT9m1T52hHNCe1l"), [
 
     "username" => "Dicsystime",
     // "avatar_url"=> "https://i.imgur.com/4M34hi2.png",

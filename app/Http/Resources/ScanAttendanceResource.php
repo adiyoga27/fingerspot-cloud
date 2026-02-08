@@ -25,10 +25,10 @@ class ScanAttendanceResource extends JsonResource
     public function checkScanStatus($scan_status)
     {
         switch ($scan_status) {
-            case 1:
+            case 0:
                 return 'Masuk';
                 break;
-            case 2 : 
+            case 1 : 
                 return 'Pulang';
                 break;
             default:

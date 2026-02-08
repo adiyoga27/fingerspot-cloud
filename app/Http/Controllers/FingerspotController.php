@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Enums\ScanEnum;
 use App\Models\Attendance;
 use App\Models\Employee;

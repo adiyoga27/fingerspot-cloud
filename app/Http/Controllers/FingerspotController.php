@@ -26,41 +26,54 @@ class FingerspotController extends Controller
       
         try {
           $this->saveText($request);
-          $validation = $request->all();
-            $payload = [
-                'type_hit' => $validation['type'],
-                'cloud_id' => $validation['cloud_id'],
-                'data' => json_encode($validation),
-            ];
-            if(isset($payload['trans_id'])){
-              $payload['trans_id'] = $validation['trans_id'];
-            }
-            Webhooks::create($payload);
+          
+          // Manual JSON decode to handle raw input regardless of Content-Type header
+          $content = $request->getContent();
+          $validation = json_decode($content, true);
 
-            if($payload['type_hit'] == 'attlog'){
-                $attlog = $validation['data'];
-                    $employee = Employee::where('pin', $attlog['pin'])->where('client_id', $payload['cloud_id'] )->first();
+          if (isset($validation['type']) && isset($validation['cloud_id'])) {
+              $payload = [
+                  'type_hit' => $validation['type'],
+                  'cloud_id' => $validation['cloud_id'],
+                  'data' => json_encode($validation),
+              ];
+              
+              if(isset($validation['trans_id'])){
+                $payload['trans_id'] = $validation['trans_id'];
+              }
+              
+              Webhooks::create($payload);
 
-                    if($employee){
-                        Attendance::create([
-                            'employee_id' => $employee->id,
-                            'cloud_id' => $payload['cloud_id'],
-                            'device_id' => $employee->device->id,
-                            'device_name' => $employee->device->name,
-                            'employee_name' => $employee->name,
-                            'pin' => $attlog['pin'],
-                            'scan_at' => $attlog['scan'],
-                            'scan_verify' => $attlog['verify'],
-                            'scan_status' => $attlog['status_scan'],
-                        ]) ;   
-                        (new FirebaseService)->sendNotification(strtoupper($employee->name) . ' SCAN '.$this->statusScan($attlog['status_scan']), $employee->name." melakukan scan pada waktu ".date("d F Y H:i", strtotime($attlog['scan']))." wita", 'all', 'android');
+              if($payload['type_hit'] == 'attlog'){
+                  $attlog = $validation['data'];
+                      $employee = Employee::where('pin', $attlog['pin'])->where('client_id', $payload['cloud_id'] )->first();
 
-                    }
-            }
-            return response()->json([
-                'status' => true,
-                'message' => 'success'
-            ]);
+                      if($employee){
+                          Attendance::create([
+                              'employee_id' => $employee->id,
+                              'cloud_id' => $payload['cloud_id'],
+                              'device_id' => $employee->device->id,
+                              'device_name' => $employee->device->name,
+                              'employee_name' => $employee->name,
+                              'pin' => $attlog['pin'],
+                              'scan_at' => $attlog['scan'],
+                              'scan_verify' => $attlog['verify'],
+                              'scan_status' => $attlog['status_scan'],
+                          ]) ;   
+                          (new FirebaseService)->sendNotification(strtoupper($employee->name) . ' SCAN '.$this->statusScan($attlog['status_scan']), $employee->name." melakukan scan pada waktu ".date("d F Y H:i", strtotime($attlog['scan']))." wita", 'all', 'android');
+
+                      }
+              }
+              return response()->json([
+                  'status' => true,
+                  'message' => 'success'
+              ]);
+          } else {
+              return response()->json([
+                  'status' => false,
+                  'message' => 'Invalid payload: type or cloud_id missing'
+              ], 400);
+          }
         } catch (\Throwable $th) {
           $this->errorInfo($th->getMessage(),$th);
           $this->logInfo(json_encode($request->all()));

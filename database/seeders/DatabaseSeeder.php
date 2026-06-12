@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Adiyoga',
             'username' => 'adiyoga27',
             'email' => 'adiyoga27@gmail.com',
-            'password' => Hash::make('bogis1996')
+            'password' => Hash::make('bogis1996'),
+            'role' => 'admin',
         ]);
     }
 }

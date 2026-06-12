@@ -68,7 +68,7 @@
         "platform": {
             "ext-grpc": "1.57.0",
             "ext-sodium": "1.0.7",
-            "php": "8.4.20"
+            "php": "8.3.30"
         },
         "policy": {
             "advisories": {

@@ -9,7 +9,7 @@ return [
      * ------------------------------------------------------------------------
      */
 
-    'default' => env('FIREBASE_PROJECT', 'app'),
+    'default' => env('FIREBASE_PROJECT', 'fingerspot'),
 
     /*
      * ------------------------------------------------------------------------
@@ -18,7 +18,7 @@ return [
      */
 
     'projects' => [
-        'gsfinger' => [
+        'fingerspot' => [
 
             /*
              * ------------------------------------------------------------------------
@@ -50,7 +50,7 @@ return [
              *
              */
 
-            'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+            'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS', base_path('keystore/fingerspot-685a3-firebase-adminsdk.json'))),
 
             /*
              * ------------------------------------------------------------------------

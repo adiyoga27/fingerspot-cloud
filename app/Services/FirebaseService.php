@@ -25,7 +25,7 @@ class FirebaseService
         $this->messaging = Firebase::messaging();
         $this->http = new Client();
 
-        $credentialsPath = config('firebase.projects.fingerspot.credentials');
+        $credentialsPath = base_path(config('firebase.projects.fingerspot.credentials'));
         $this->firestoreConfig = json_decode(file_get_contents($credentialsPath), true);
     }
 
@@ -66,7 +66,7 @@ class FirebaseService
                 'title'       => ['stringValue' => $title],
                 'message'     => ['stringValue' => $body],
                 'type'        => ['stringValue' => 'info'],
-                'clickable'   => ['integerValue' => '1'],
+                'clickable'   => ['booleanValue' => true],
                 'to'          => [
                     'arrayValue' => [
                         'values' => [

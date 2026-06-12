@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FingerspotController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TransController;
+use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', function () {
@@ -14,8 +19,14 @@ Route::post('login', [AuthController::class, 'verify']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::resource('devices', DeviceController::class);
+    Route::resource('employees', EmployeeController::class);
+    Route::resource('attendances', AttendanceController::class)->only(['index']);
+    Route::resource('webhooks', WebhookController::class)->only(['index', 'show']);
+    Route::resource('trans', TransController::class)->only(['index', 'show']);
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
 });
 
 Route::get('test', [FingerspotController::class, 'test2']);

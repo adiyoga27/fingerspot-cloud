@@ -10,15 +10,11 @@ class NotificationController extends Controller
 {
     public function index(Request $request)
     {
-        $page = $request->get('page', 1);
-        $pageSize = 15;
-        $offset = ($page - 1) * $pageSize;
-
         $notifications = [];
-        $total = 0;
 
         try {
             $credentialsPath = config('firebase.projects.fingerspot.credentials');
+            $credentialsPath = base_path($credentialsPath);
             $config = json_decode(file_get_contents($credentialsPath), true);
             $projectId = $config['project_id'];
 
@@ -34,8 +30,7 @@ class NotificationController extends Controller
             $response = $http->get($url, [
                 'headers' => ['Authorization' => 'Bearer ' . $token['access_token']],
                 'query' => [
-                    'pageSize' => $pageSize,
-                    'offset' => $offset,
+                    'pageSize' => 50,
                     'orderBy' => 'timestamp desc',
                 ],
             ]);
@@ -47,20 +42,21 @@ class NotificationController extends Controller
                     $fields = [];
                     foreach ($doc['fields'] as $key => $value) {
                         $valType = array_key_first($value);
-                        $fields[$key] = $value[$valType];
+                        $val = $value[$valType];
+                        if (is_array($val) && isset($val['values'])) {
+                            $val = collect($val['values'])->pluck('stringValue')->implode(', ');
+                        }
+                        $fields[$key] = $val;
                     }
                     $fields['id'] = basename($doc['name']);
                     $notifications[] = $fields;
                 }
             }
 
-            $total = count($notifications);
-            $totalPages = max(1, (int) ceil($total / $pageSize));
-
         } catch (\Throwable $e) {
-            $totalPages = 1;
+            logger()->error('Firestore fetch failed: ' . $e->getMessage());
         }
 
-        return view('content.notifications.index', compact('notifications', 'page', 'totalPages'));
+        return view('content.notifications.index', compact('notifications'));
     }
 }

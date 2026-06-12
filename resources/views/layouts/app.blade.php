@@ -103,6 +103,45 @@
                             </a>
                         </li>
 
+                        <li class="menu-title">Data Master</li>
+
+                        <li>
+                            <a href="{{ route('devices.index') }}" class="waves-effect {{ request()->routeIs('devices.*') ? 'active' : '' }}">
+                                <i class="bx bx-devices"></i>
+                                <span>Devices</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('employees.index') }}" class="waves-effect {{ request()->routeIs('employees.*') ? 'active' : '' }}">
+                                <i class="bx bx-user"></i>
+                                <span>Karyawan</span>
+                            </a>
+                        </li>
+
+                        <li class="menu-title">Log & Monitoring</li>
+
+                        <li>
+                            <a href="{{ route('attendances.index') }}" class="waves-effect {{ request()->routeIs('attendances.*') ? 'active' : '' }}">
+                                <i class="bx bx-calendar-check"></i>
+                                <span>Absensi</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('webhooks.index') }}" class="waves-effect {{ request()->routeIs('webhooks.*') ? 'active' : '' }}">
+                                <i class="bx bx-git-repo-forked"></i>
+                                <span>Webhook Log</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('trans.index') }}" class="waves-effect {{ request()->routeIs('trans.*') ? 'active' : '' }}">
+                                <i class="bx bx-transfer"></i>
+                                <span>API Trans</span>
+                            </a>
+                        </li>
+
                         <li class="menu-title">FCM</li>
 
                         <li>

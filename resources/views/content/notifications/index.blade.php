@@ -18,23 +18,23 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Riwayat Notifikasi FCM</h4>
+                <h4 class="card-title mb-4">Riwayat Notifikasi FCM <span class="badge bg-info ms-1">{{ count($notifications) }}</span></h4>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
                                 <th style="width:5%">#</th>
                                 <th style="width:25%">Judul</th>
-                                <th style="width:35%">Pesan</th>
+                                <th style="width:30%">Pesan</th>
                                 <th style="width:8%">Tipe</th>
                                 <th style="width:10%">Target</th>
-                                <th style="width:17%">Waktu</th>
+                                <th style="width:22%">Waktu (WITA)</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($notifications as $i => $notif)
                             <tr>
-                                <td>{{ ($page - 1) * 15 + $i + 1 }}</td>
+                                <td>{{ $i + 1 }}</td>
                                 <td>
                                     <strong>{{ $notif['title'] ?? '-' }}</strong>
                                 </td>
@@ -43,13 +43,7 @@
                                     <span class="badge bg-info">{{ $notif['type'] ?? 'info' }}</span>
                                 </td>
                                 <td>
-                                    @php
-                                        $to = $notif['to'] ?? null;
-                                        if (is_array($to) && isset($to['values'])) {
-                                            $to = collect($to['values'])->pluck('stringValue')->implode(', ');
-                                        }
-                                    @endphp
-                                    <span class="badge bg-secondary">{{ $to }}</span>
+                                    <span class="badge bg-secondary">{{ $notif['to'] ?? '-' }}</span>
                                 </td>
                                 <td>
                                     @if(isset($notif['timestamp']))
